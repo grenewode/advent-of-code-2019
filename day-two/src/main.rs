@@ -15,7 +15,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let mut vm = intcode::VM::new_debug(&program);
 
-    println!("output part 1 = {}", vm.execute()?);
+    println!("output part 1 = {} (3085697)", vm.execute()?);
+
+    for i in 0..100 {
+        for j in 0..=i {
+            let mut program: Box<[_]> = Box::from(PROGRAM);
+
+            // Repair the damaged program
+            program[1] = i;
+            program[2] = j;
+
+            let mut vm = intcode::VM::new_silent(&program);
+
+            if vm.execute()? == 19690720 {
+                println!("output part 2 = {} {}; {}", i, j, 100 * i + j);
+            }
+        }
+    }
 
     Ok(())
 }
